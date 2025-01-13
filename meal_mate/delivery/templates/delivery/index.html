@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meal Mate - Food Delivery</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <!-- Link logo back to home page -->
+            <a href="index.html" style="text-decoration: none; color: inherit;">Meal Mate</a>
+        </div>
+        <div class="nav-buttons">
+            <!-- Added links to auth pages -->
+            <a href="signin/" class="btn btn-outline">Sign In</a>
+            <a href="signup/" class="btn btn-primary">Sign Up</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <h1>Delicious Food Delivered<br>To Your Doorstep</h1>
+        <p>Experience the best food delivery service with Meal Mate.<br>
+           Order from your favorite restaurants and get it delivered in minutes.</p>
+        <!-- Link the Order Now button to sign up page -->
+        <a href="signup.html" class="btn btn-primary">Order Now</a>
+    </section>
+
+    <section class="features">
+        <div class="feature-card">
+            <img src="{% static 'images/restaurant.jpeg' %}" alt="Wide Selection">
+            <h3>Wide Selection</h3>
+            <p>Choose from thousands of restaurants and cuisines in your area.</p>
+        </div>
+        <div class="feature-card">
+            <img src="{% static 'images/restaurant.jpeg' %}" alt="Fast Delivery">
+            <h3>Fast Delivery</h3>
+            <p>Get your food delivered quickly with our efficient delivery network.</p>
+        </div>
+        <div class="feature-card">
+            <img src="{% static 'images/restaurant.jpeg' %}" alt="Live Tracking">
+            <h3>Live Tracking</h3>
+            <p>Track your order in real-time from restaurant to your doorstep.</p>
+        </div>
+    </section>
+</body>
+</html>
