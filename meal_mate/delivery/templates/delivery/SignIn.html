@@ -24,7 +24,7 @@
             <p class="auth-subtitle">Sign in to continue to Meal Mate</p>
 
             {% if error_message %}
-            <p class="text-danger" style="color: red; font-size: 14px; margin-top: 10px;">{{ error_message }}</p>
+            <p class="text-danger" style="color: red; font-size: 14px; margin-top: 10px; margin-bottom: 10px;">{{ error_message }}</p>
             {% endif %}
             
             <form class="auth-form" method="POST" action="{% url 'handleSignin' %}">

@@ -1,0 +1,97 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Menu Item - Meal Mate</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <a href="adminhome.html" style="text-decoration: none; color: inherit;">Meal Mate</a>
+        </div>
+        <div class="nav-buttons">
+            <a href="adminhome.html" class="btn btn-outline">Back to Dashboard</a>
+            <a href="index.html" class="btn btn-primary">Logout</a>
+        </div>
+    </nav>
+
+    <!-- Menu Items Table -->
+    <div class="table-container">
+        <h2>Menu Items</h2>
+        <div class="table-wrapper">
+            <table class="restaurant-table">  <!-- Using the same class as the restaurant list -->
+                <thead>
+                    <tr>
+                        <th>Item Photo</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Price</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in menu_items %}
+                    <tr>
+                        <td>
+                            <img src="{{ item.photo }}" alt="{{ item.item_name }}" width="100">
+                        </td>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.description }}</td>
+                        <td>₹{{ item.price }}</td>
+                        <td>
+                            <button class="btn btn-small btn-outline">Edit</button>
+                            <button class="btn btn-small btn-danger">Delete</button>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" style="text-align:center;">No menu items added yet.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="form-container">
+        <div class="form-card">
+            <h2>Add Menu Item</h2>
+            <p class="form-subtitle">Enter menu item details below</p>
+            
+            <form method="POST" action="{% url 'restaurant_menu' restaurant.id %}" class="item-form">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="item-name">Item Name</label>
+                    <input type="text" name="name" id="item-name" required 
+                           placeholder="Enter item name">
+                </div>
+
+                <div class="form-group">
+                    <label for="item-description">Item Description</label>
+                    <textarea id="item-description" name="description" required 
+                              placeholder="Enter item description" rows="3"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="item-price">Price (₹)</label>
+                    <input type="number" id="item-price" name="price" required 
+                           placeholder="Enter price" min="0" step="0.01"
+                           class="price-input">
+                </div>
+
+                <div class="form-group">
+                    <label for="item-photo">Item Photo</label>
+                    <input type="url" id="item-photo" name="photo" placeholder="Enter the photo URL" required 
+                           class="file-input">
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">Add Item</button>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

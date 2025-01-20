@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Restaurants - Meal Mate</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <a href="adminhome.html" style="text-decoration: none; color: inherit;">Meal Mate</a>
+        </div>
+        <div class="nav-buttons">
+            <a href="adminhome.html" class="btn btn-outline">Back to Dashboard</a>
+            <a href="index.html" class="btn btn-primary">Logout</a>
+        </div>
+    </nav>
+
+    <div class="table-container">
+        <h2>All Restaurants</h2>
+        <div class="table-wrapper">
+            <table class="restaurant-table">
+                <thead>
+                    <tr>
+                        <th>Restaurant Photo</th>
+                        <th>Name</th>
+                        <th>Cusines</th>
+                        <th>Address</th>
+                        <th>Ratings</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for restaurant in restaurants %}
+                    <tr>
+                        <td>
+                            <img src="{{ restaurant.restaurant_photo}}" alt="Picture of {{ restaurant.restaurant_name }}" width="100">
+                        </td>
+                        <td>{{ restaurant.restaurant_name }}</td>
+                        <td>{{ restaurant.restaurant_cuisines }}</td>
+                        <td>{{ restaurant.restaurant_address }}</td>
+                        <td>{{ restaurant.restaurant_rating }}</td>
+                        <td>
+                            <a href="{% url 'restaurant_menu' restaurant.id %}" class="btn btn-primary">View Menu</a>
+                            <button class="btn btn-small btn-outline">Edit</button>
+                            <button class="btn btn-small btn-danger">Delete</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    <!-- More rows would be dynamically added here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
