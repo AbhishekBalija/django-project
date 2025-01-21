@@ -3,16 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Home - Meal Mate</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-<body>
-    <div>
-        <h1>Welcome to Meal Mate!</h1>
-        <p>Meal Mate is a food delivery platform that connects busy professionals with local, delicious, and affordable food options.</p>
-    </div>
-    <div>
-        <a href="restaurant_page">Add New Restaurant</a>
-        <a href="view_restaurants">View All Restaurants</a>
+<body class="bg-gray-50">
+
+    <nav class="bg-white shadow px-6 py-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center">
+                <div class="text-3xl font-bold text-orange-600">
+                    <a href="{% url 'index' %}" class="flex items-center space-x-2 hover:text-orange-700 transition duration-300">
+                        <i class="fas fa-utensils"></i>
+                        <span>Meal Mate</span>
+                    </a>
+                </div>
+            </div>
+            <div class="space-x-4">
+                <a href="{% url 'logout' %}" 
+                   class="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-500 transition duration-200">
+                    Logout
+                </a>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-12">
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">Welcome to Meal Mate!</h1>
+            <p class="text-xl text-gray-600 leading-relaxed">
+                Meal Mate is a food delivery platform that connects busy professionals 
+                with local, delicious, and affordable food options.
+            </p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-4">
+            <a href="{% url 'add_restaurant' %}" 
+               class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 transition duration-150">
+                Add New Restaurant
+            </a>
+            <a href="{% url 'show_restaurant_page' %}" 
+               class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition duration-150">
+                View All Restaurants
+            </a>
+        </div>
     </div>
 </body>
 </html>

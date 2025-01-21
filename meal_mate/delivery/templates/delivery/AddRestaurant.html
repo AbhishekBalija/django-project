@@ -5,62 +5,112 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Restaurant - Meal Mate</title>
-    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-<body>
-    <nav>
-        <div class="logo">
-            <a href="adminhome.html" style="text-decoration: none; color: inherit;">Meal Mate</a>
-        </div>
-        <div class="nav-buttons">
-            <a href="adminhome.html" class="btn btn-outline">Back to Dashboard</a>
-            <a href="index.html" class="btn btn-primary">Logout</a>
+<body class="bg-orange-50">
+    <nav class="bg-white shadow px-6 py-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="text-3xl font-bold text-orange-600">
+                <a href="{% url 'index' %}" class="flex items-center space-x-2 hover:text-orange-700 transition duration-300">
+                    <i class="fas fa-utensils"></i>
+                    <span>Meal Mate</span>
+                </a>
+            </div>
+            <div class="space-x-4">
+                <a href="{% url 'dashboard' %}"
+               class="px-4 py-2 border border-orange-500 text-orange-500 rounded-lg hover:bg-orange-50 transition duration-200">
+                Back to Dashboard
+            </a>
+                <a href="{% url 'logout' %}"
+                   class="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-500 transition duration-200">
+                    Logout
+                </a>
+            </div>
         </div>
     </nav>
 
-    <div class="form-container">
-        <div class="form-card">
-            <h2>Add New Restaurant</h2>
-            <p class="form-subtitle">Enter restaurant details below</p>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="max-w-7xl mx-auto mt-4 duration-200">
+                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+                    {{ message }}
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-lg">
+            <div class="text-center">
+                <h2 class="text-3xl font-bold text-gray-900">Add New Restaurant</h2>
+                <p class="mt-2 text-gray-600">Enter restaurant details below</p>
+            </div>
 
             {% if error_message %}
-            <p class="text-danger" style="color: red; font-size: 14px; margin-top: 10px; margin-bottom: 10px;">{{ error_message }}</p>
+            <p class="text-red-500 text-sm mt-2 mb-2">{{ error_message }}</p>
             {% endif %}
             
-            <form class="restaurant-form" method="POST" action="{% url 'add_restaurant' %}">
+            <form class="mt-8 space-y-6" method="POST" action="{% url 'add_restaurant' %}">
                 {% csrf_token %}
-                <div class="form-group">
-                    <label for="restaurant-name">Restaurant Name</label>
-                    <input type="text" id="restaurant-name" name="restaurant_name" required 
-                           placeholder="Enter restaurant name">
+                <div class="space-y-4">
+                    <div>
+                        <label for="restaurant-name" class="block text-sm font-medium text-gray-700">Restaurant Name</label>
+                        <input type="text" 
+                               id="restaurant-name" 
+                               name="restaurant_name" 
+                               required 
+                               placeholder="Enter restaurant name"
+                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500">
+                    </div>
+
+                    <div>
+                        <label for="restaurant-cuisines" class="block text-sm font-medium text-gray-700">Cuisines</label>
+                        <input type="text" 
+                               name="restaurant_cuisines" 
+                               id="restaurant-cuisines" 
+                               required 
+                               placeholder="Enter comma-separated cuisines"
+                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500">
+                    </div>
+
+                    <div>
+                        <label for="restaurant-address" class="block text-sm font-medium text-gray-700">Restaurant Address</label>
+                        <textarea name="restaurant_address" 
+                                  id="restaurant-address" 
+                                  required 
+                                  placeholder="Enter complete address" 
+                                  rows="3"
+                                  class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500"></textarea>
+                    </div>
+
+                    <div>
+                        <label for="restaurant-rating" class="block text-sm font-medium text-gray-700">Restaurant Rating</label>
+                        <input type="number" 
+                               name="restaurant_rating" 
+                               id="restaurant-rating" 
+                               required 
+                               min="0" 
+                               max="5" 
+                               step="0.1" 
+                               placeholder="Enter restaurant rating"
+                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500">
+                    </div>
+
+                    <div>
+                        <label for="restaurant-photo" class="block text-sm font-medium text-gray-700">Restaurant Photo URL</label>
+                        <input type="url" 
+                               name="restaurant_photo" 
+                               id="restaurant-photo"
+                               placeholder="Enter photo URL"
+                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500">
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="restaurant-cuisines">Cuisines</label>
-                    <input type="text" name="restaurant_cuisines" id="restaurant-cuisines" required 
-                           placeholder="Enter comma-separated cuisines">
-                </div>
-
-                <div class="form-group">
-                    <label for="restaurant-address">Restaurant Address</label>
-                    <textarea name="restaurant_address" id="restaurant-address" required 
-                              placeholder="Enter complete address" rows="3"></textarea>
-                </div>
-
-                 <div class="form-group">
-                    <label for="restaurant-rating">Restaurant Rating</label>
-                    <input type="number" name="restaurant_rating" id="restaurant-rating" required min="1" max="5" 
-                           step="0.5" placeholder="Enter restaurant rating">
-                </div>
-
-
-                <div class="form-group">
-                    <label for="restaurant_photo">Restaurant Photo Url</label>
-                    <input type="url" name="restaurant_photo" id="restaurant-photo"
-                           class="file-input">
-                </div>
-
-                <button type="submit" class="btn btn-primary btn-block">Add Restaurant</button>
+                <button type="submit" 
+                        class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-orange-600 hover:bg-orange-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500">
+                    Add Restaurant
+                </button>
             </form>
         </div>
     </div>
