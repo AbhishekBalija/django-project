@@ -1,0 +1,132 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ restaurant.restaurant_name }} - Menu | Meal Mate</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-orange-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white border-b border-orange-100 px-6 py-3 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <!-- Logo Section -->
+            <div class="text-2xl font-extrabold text-orange-600">
+                <a href="{% url 'show_restaurant_page' %}" class="flex items-center gap-3 hover:text-orange-700 transition-colors duration-200">
+                    <i class="fas fa-utensils text-orange-500"></i>
+                    <span class="bg-gradient-to-r from-orange-600 to-orange-500 text-transparent bg-clip-text">Meal Mate</span>
+                </a>
+            </div>
+            
+            <!-- Navigation Items -->
+            <div class="flex items-center gap-6">
+                <a href="javascript:history.back()" 
+                   class="flex items-center text-gray-600 hover:text-orange-600 transition-colors duration-200">
+                    <i class="fas fa-arrow-left text-sm mr-2"></i>
+                    <span>Back to Restaurants</span>
+                </a>
+                
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center">
+                        <span class="text-gray-700 font-medium px-2">WELCOME</span>
+                        <i class="fas fa-user text-orange-500 mr-2"></i>
+                        <span class="text-gray-700 font-medium">{{ request.session.fullname }}</span>
+                    </div>
+                    
+                    <a href="{% url 'logout' %}" 
+                       class="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition-all duration-200 shadow-sm hover:shadow-md flex items-center gap-2">
+                        <i class="fas fa-sign-out-alt text-sm"></i>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Restaurant Header -->
+    <div class="relative h-64">
+        <img src="{{ restaurant.restaurant_photo }}" 
+             alt="{{ restaurant.restaurant_name }}" 
+             class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+        <div class="absolute inset-0 flex items-center justify-center">
+            <div class="text-center text-white">
+                <h1 class="text-4xl font-bold mb-2">{{ restaurant.restaurant_name }}</h1>
+                <p class="text-lg mb-2">{{ restaurant.restaurant_cuisines }}</p>
+                <div class="flex items-center justify-center space-x-2">
+                    <i class="fas fa-star text-yellow-400"></i>
+                    <span>{{ restaurant.restaurant_rating }} Rating</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menu Categories -->
+    <div class="max-w-7xl mx-auto py-8 px-4">
+        {% regroup menu_items by category as category_list %}
+        
+        <div class="grid grid-cols-1 gap-8">
+            {% for category in category_list %}
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                    {% if category.grouper == 'Main Course' %}
+                        <i class="fas fa-drumstick-bite text-orange-500 mr-3"></i>
+                    {% elif category.grouper == 'Appetizer' %}
+                        <i class="fas fa-cheese text-orange-500 mr-3"></i>
+                    {% elif category.grouper == 'Dessert' %}
+                        <i class="fas fa-ice-cream text-orange-500 mr-3"></i>
+                    {% elif category.grouper == 'Beverage' %}
+                        <i class="fas fa-glass-martini-alt text-orange-500 mr-3"></i>
+                    {% else %}
+                        <i class="fas fa-utensils text-orange-500 mr-3"></i>
+                    {% endif %}
+                    {{ category.grouper }}
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {% for item in category.list %}
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition duration-300">
+                        <img src="{{ item.photo }}" 
+                             alt="{{ item.item_name }}" 
+                             class="w-full h-48 object-cover">
+                        <div class="p-4">
+                            <div class="flex justify-between items-start mb-2">
+                                <h3 class="text-lg font-semibold text-gray-900">{{ item.name }}</h3>
+                                <span class="text-orange-500 font-bold">₹{{ item.price }}</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-4">{{ item.description }}</p>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    {% if item.is_veg %}
+                                        <span class="text-green-500 flex items-center">
+                                            <i class="fas fa-leaf mr-1"></i> Veg
+                                        </span>
+                                    {% else %}
+                                        <span class="text-red-500 flex items-center">
+                                            <i class="fas fa-drumstick-bite mr-1"></i> Non-veg
+                                        </span>
+                                    {% endif %}
+                                </div>
+                                <button class="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition duration-200">
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white mt-16 py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center text-gray-600">
+            <p>© 2024 Meal Mate. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

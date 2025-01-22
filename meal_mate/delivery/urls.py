@@ -22,4 +22,7 @@ urlpatterns = [
     # Menu-related paths
     path('restaurants/<int:restaurant_id>/menu/<int:item_id>/edit/', views.edit_menu_item, name='edit_menu_item'),
     path('restaurants/<int:restaurant_id>/menu/<int:item_id>/delete/', views.delete_menu_item, name='delete_menu_item'),
+
+    # Customer-related paths
+    path('restaurants/<int:restaurant_id>/customermenu/', views.customer_menu, name='customer_menu'),
 ]

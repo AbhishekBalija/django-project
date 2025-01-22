@@ -5,112 +5,178 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meal Mate - Food Delivery</title>
-    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50">
-    <!-- Navigation -->
-    <nav class="bg-white shadow-lg">
-        <div class="max-w-7xl mx-auto px-6 py-4">
-            <div class="flex justify-between items-center">
-                <div class="flex items-center">
-                    <div class="text-3xl font-bold text-orange-600">
-                        <a href="" class="flex items-center space-x-2 hover:text-orange-700 transition duration-300">
-                            <i class="fas fa-utensils"></i>
-                            <span>Meal Mate</span>
+    <div class="relative">
+        <!-- Navigation -->
+        <nav class="absolute top-0 left-0 right-0 z-50">
+            <div class="max-w-7xl mx-auto px-6 py-4">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center">
+                        <div class="text-3xl font-bold text-orange-400">
+                            <a href="" class="flex items-center space-x-2 hover:text-orange-400 transition duration-300">
+                                <i class="fas fa-utensils"></i>
+                                <span>Meal Mate</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-6">
+                        <a href="signin/" class="px-6 py-2.5 rounded-full border-2 border-orange-400 text-orange-400 font-medium hover:bg-orange-400 hover:text-white transition duration-300">
+                            Sign In
+                        </a>
+                        <a href="signup/" class="px-6 py-2.5 rounded-full bg-orange-500 text-white font-medium hover:bg-orange-600 transition duration-300 shadow-md hover:shadow-lg">
+                            Sign Up
                         </a>
                     </div>
                 </div>
-                <div class="flex items-center space-x-6">
-                    <a href="signin/" class="px-6 py-2.5 rounded-full border-2 border-orange-600 text-orange-600 font-medium hover:bg-orange-50 transition duration-300">
-                        Sign In
-                    </a>
-                    <a href="signup/" class="px-6 py-2.5 rounded-full bg-orange-600 text-white font-medium hover:bg-orange-700 transition duration-300 shadow-md hover:shadow-lg">
-                        Sign Up
-                    </a>
-                </div>
             </div>
-        </div>
-    </nav>
+        </nav>
 
-    <!-- Hero Section -->
-    <section class="relative py-20 overflow-hidden">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="lg:flex items-center justify-between">
-                <div class="lg:w-1/2 mb-12 lg:mb-0">
-                    <h1 class="text-5xl lg:text-6xl font-bold text-gray-900 mb-8 leading-tight">
-                        Delicious Food
-                        <span class="text-orange-600">Delivered</span>
-                        To Your Doorstep
-                    </h1>
-                    <p class="text-xl text-gray-600 mb-10 leading-relaxed">
-                        Experience the best food delivery service with Meal Mate.
-                        Order from your favorite restaurants and enjoy contactless delivery in minutes.
-                    </p>
-                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6">
-                        <a href="signup/" class="px-8 py-4 rounded-full bg-orange-600 text-white text-lg font-medium hover:bg-orange-700 transition duration-300 shadow-md hover:shadow-lg text-center">
-                            Order Now
-                        </a>
-                        <a href="#features" class="px-8 py-4 rounded-full border-2 border-orange-600 text-orange-600 text-lg font-medium hover:bg-orange-50 transition duration-300 text-center">
-                            Learn More
-                        </a>
-                    </div>
-                </div>
-                <div class="lg:w-1/2 lg:pl-12">
-                    <div class="relative">
-                        <div class="absolute inset-0 bg-orange-100 rounded-full filter blur-3xl opacity-30 animate-pulse"></div>
-                        <img src="{% static 'images/restaurant.jpeg' %}" alt="Hero" class="relative rounded-3xl shadow-2xl w-full object-cover aspect-[4/3]">
-                    </div>
+        <!-- Hero Section -->
+        <section class="relative w-full h-screen bg-cover bg-center flex items-center px-6"
+                 style="background-image: url('{% static "images/restaurant-hero.png" %}')"> 
+            <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+
+            <div class="relative z-10 max-w-3xl text-white ml-6">
+                <h1 class="text-5xl lg:text-6xl font-bold mb-6 leading-tight drop-shadow-lg text-left">
+                    Delicious Food
+                    <span class="text-orange-400">Delivered</span>
+                    To Your Doorstep
+                </h1>
+                <p class="text-lg md:text-xl text-gray-200 mb-8 leading-relaxed text-left">
+                    Experience the best food delivery service with Meal Mate.
+                    Order from your favorite restaurants and enjoy contactless delivery in minutes.
+                </p>
+                <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6">
+                    <a href="signup/" class="px-8 py-4 rounded-full bg-orange-500 text-white text-lg font-medium hover:bg-orange-600 transition duration-300 shadow-md hover:shadow-lg text-center">
+                        Order Now
+                    </a>
+                    <a href="#features" class="px-8 py-4 rounded-full border-2 border-white text-white text-lg font-medium hover:bg-white hover:text-orange-600 transition duration-300 text-center">
+                        Learn More
+                    </a>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </div>
 
     <!-- Features Section -->
     <section id="features" class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-6">
             <h2 class="text-3xl font-bold text-center text-gray-900 mb-16">Why Choose Meal Mate?</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
-                <!-- Feature Card 1 -->
+                <!-- Feature 1 -->
                 <div class="bg-orange-50 p-8 rounded-2xl hover:shadow-xl transition duration-300 group">
                     <div class="mb-6">
                         <div class="w-16 h-16 bg-orange-600 rounded-2xl flex items-center justify-center text-white text-2xl mb-6 group-hover:scale-110 transition duration-300">
-                            <i class="fas fa-store"></i>
+                            <i class="fas fa-truck"></i>
                         </div>
-                        <img src="{% static 'images/restaurant.jpeg' %}" alt="Wide Selection" 
-                             class="w-full h-48 object-cover rounded-xl shadow-md group-hover:scale-105 transition duration-300">
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Wide Selection</h3>
-                    <p class="text-gray-600 leading-relaxed">Choose from thousands of restaurants and cuisines in your area. From local favorites to international cuisine.</p>
-                </div>
-
-                <!-- Feature Card 2 -->
-                <div class="bg-orange-50 p-8 rounded-2xl hover:shadow-xl transition duration-300 group">
-                    <div class="mb-6">
-                        <div class="w-16 h-16 bg-orange-600 rounded-2xl flex items-center justify-center text-white text-2xl mb-6 group-hover:scale-110 transition duration-300">
-                            <i class="fas fa-motorcycle"></i>
-                        </div>
-                        <img src="{% static 'images/restaurant.jpeg' %}" alt="Fast Delivery" 
+                        <img src="{% static 'images/Delivary-Card.png' %}" alt="Fast Delivery" 
                              class="w-full h-48 object-cover rounded-xl shadow-md group-hover:scale-105 transition duration-300">
                     </div>
                     <h3 class="text-xl font-semibold text-gray-900 mb-4">Fast Delivery</h3>
-                    <p class="text-gray-600 leading-relaxed">Get your food delivered quickly with our efficient delivery network. Hot and fresh, right to your doorstep.</p>
+                    <p class="text-gray-600 leading-relaxed">Get your favorite meals delivered to your doorstep in minutes. Our efficient delivery network ensures your food arrives hot and fresh.</p>
                 </div>
 
-                <!-- Feature Card 3 -->
+                <!-- Feature 2 -->
                 <div class="bg-orange-50 p-8 rounded-2xl hover:shadow-xl transition duration-300 group">
                     <div class="mb-6">
                         <div class="w-16 h-16 bg-orange-600 rounded-2xl flex items-center justify-center text-white text-2xl mb-6 group-hover:scale-110 transition duration-300">
-                            <i class="fas fa-map-marker-alt"></i>
+                            <i class="fas fa-utensils"></i>
                         </div>
-                        <img src="{% static 'images/restaurant.jpeg' %}" alt="Live Tracking" 
+                        <img src="{% static 'images/Food-Card.png' %}" alt="Quality Food" 
                              class="w-full h-48 object-cover rounded-xl shadow-md group-hover:scale-105 transition duration-300">
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Live Tracking</h3>
-                    <p class="text-gray-600 leading-relaxed">Track your order in real-time from restaurant to your doorstep. Know exactly when your food will arrive.</p>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Quality Food</h3>
+                    <p class="text-gray-600 leading-relaxed">Partner with top-rated restaurants to ensure you get the best quality food. Every meal is prepared with fresh ingredients.</p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="bg-orange-50 p-8 rounded-2xl hover:shadow-xl transition duration-300 group">
+                    <div class="mb-6">
+                        <div class="w-16 h-16 bg-orange-600 rounded-2xl flex items-center justify-center text-white text-2xl mb-6 group-hover:scale-110 transition duration-300">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <img src="{% static 'images/Easy-Ordering.png' %}" alt="Easy Ordering" 
+                             class="w-full h-48 object-cover rounded-xl shadow-md group-hover:scale-105 transition duration-300">
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Easy Ordering</h3>
+                    <p class="text-gray-600 leading-relaxed">Order with just a few taps on your phone. Our user-friendly app makes food ordering simple and convenient.</p>
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- Footer -->
+    <footer class="bg-black text-white py-16">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+                <!-- Company Info -->
+                <div class="space-y-4">
+                    <h3 class="text-2xl font-bold text-orange-400">Meal Mate</h3>
+                    <p class="text-gray-300">Making food delivery fast, reliable, and delicious for everyone.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-300 hover:text-orange-400"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-orange-400"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-orange-400"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="space-y-4">
+                    <h4 class="text-lg font-semibold text-orange-400">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-orange-400">About Us</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-orange-400">Our Services</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-orange-400">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-orange-400">Terms of Service</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="space-y-4">
+                    <h4 class="text-lg font-semibold text-orange-400">Contact Us</h4>
+                    <ul class="space-y-2">
+                        <li class="flex items-center space-x-2">
+                            <i class="fas fa-map-marker-alt text-orange-400"></i>
+                            <span class="text-gray-300">123 Food Street, Cuisine City</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <i class="fas fa-phone text-orange-400"></i>
+                            <span class="text-gray-300">+1 234 567 890</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <i class="fas fa-envelope text-orange-400"></i>
+                            <span class="text-gray-300">support@mealmate.com</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Newsletter -->
+                <div class="space-y-4">
+                    <h4 class="text-lg font-semibold text-orange-400">Newsletter</h4>
+                    <p class="text-gray-300">Subscribe to our newsletter for updates and exclusive offers.</p>
+                    <form class="space-y-2">
+                        <input 
+                            type="email" 
+                            placeholder="Enter your email" 
+                            class="w-full px-4 py-2 rounded-lg bg-gray-800 text-white border border-gray-700 focus:outline-none focus:border-orange-400"
+                        >
+                        <button 
+                            class="w-full px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors duration-300"
+                        >
+                            Subscribe
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="mt-12 pt-8 border-t border-gray-800 text-center text-gray-400">
+                <p>&copy; 2025 Meal Mate. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
