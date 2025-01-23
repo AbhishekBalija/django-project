@@ -25,4 +25,9 @@ urlpatterns = [
 
     # Customer-related paths
     path('restaurants/<int:restaurant_id>/customermenu/', views.customer_menu, name='customer_menu'),
+
+    # Cart-related paths
+    path('cart/', views.show_cart_page, name='show_cart_page'),
+    path('cart/add/<int:item_id>/', views.add_to_cart, name='add_to_cart'),
+    path("cart/remove/<int:item_id>/", views.remove_from_cart, name="remove_from_cart"),
 ]

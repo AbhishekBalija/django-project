@@ -33,4 +33,16 @@ class MenuItem(models.Model):
 
     def __str__(self):
         return f"{self.name} {self.description} {self.price} {self.photo}"
-        
+
+
+class CartList(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name="cart_items")
+    menu_item = models.ForeignKey(MenuItem, on_delete=models.CASCADE, related_name="cart")
+    quantity = models.PositiveIntegerField(default=1)
+    added_at = models.DateTimeField(auto_now_add=True)
+
+    def total_price(self):
+        return self.quantity * self.menu_item.price
+
+    def __str__(self):
+        return f"{self.customer.fullname} - {self.menu_item.name} ({self.quantity})"
