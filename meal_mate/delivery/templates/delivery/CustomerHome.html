@@ -10,88 +10,106 @@
 </head>
 <body class="bg-orange-50 min-h-screen">
     <!-- Navigation -->
-    <nav class="bg-white shadow px-6 py-4">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="text-3xl font-bold text-orange-600">
-                <a href="{% url 'show_restaurant_page' %}" class="flex items-center space-x-2 hover:text-orange-700 transition duration-300">
+    <nav class="bg-white shadow-lg px-6 py-4 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="text-3xl font-bold">
+                <a href="{% url 'index' %}" 
+                   class="flex items-center gap-2 text-orange-600 hover:text-orange-700 transition-colors">
                     <i class="fas fa-utensils"></i>
-                    <span>Meal Mate</span>
+                    <span class="hidden sm:inline">Meal Mate</span>
                 </a>
             </div>
-            <div class="flex items-center gap-6">
-                <div class="flex items-center gap-4">
-                    <div class="flex items-center">
-                        <span class="text-gray-700 font-medium px-2">WELCOME</span>
-                        <i class="fas fa-user text-orange-500 mr-2"></i>
-                        <span class="text-gray-700 font-medium">{{ request.session.fullname  }}</span>
-                    </div>
-                    <a href="{% url 'show_cart_page' %}" class="relative flex items-center text-orange-500 hover:text-orange-600 transition-colors duration-200">
-                        <i class="fas fa-shopping-cart text-xl"></i>
-                        <span class="absolute -top-2 -right-2 bg-orange-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
-                    </a>
-                    
-                    <a href="{% url 'logout' %}" 
-                       class="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 transition-all duration-200 shadow-sm hover:shadow-md flex items-center gap-2">
-                        <i class="fas fa-sign-out-alt text-sm"></i>
-                        <span>Logout</span>
-                    </a>
+            
+            <!-- User Section -->
+            <div class="flex items-center gap-4">
+                <div class="flex items-center gap-2 text-gray-600">
+                    <i class="fas fa-user-circle text-orange-500 text-2xl"></i>
+                    <span class="font-medium">{{ request.session.fullname }}</span>
                 </div>
+                
+                <a href="{% url 'show_cart_page' %}" 
+                   class="relative text-gray-700 hover:text-orange-600 transition-colors">
+                    <i class="fas fa-shopping-cart text-xl"></i>
+                    <span class="absolute -top-2 -right-3 bg-orange-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                </a>
+                
+                <a href="{% url 'logout' %}" 
+                class="px-5 py-2.5 bg-orange-500 text-sm text-white rounded-lg hover:bg-orange-600 transition-colors flex items-center gap-2 shadow-md hover:shadow-lg">
+                 <i class="fas fa-sign-out-alt"></i>
+                 <span class="hidden sm:inline">Log Out</span>
+             </a>
             </div>
+        </div>
     </nav>
 
-    <!-- Search Section -->
-    <div class="max-w-7xl mx-auto py-8 px-4">
-        <div class="flex flex-col items-center space-y-4 mb-12">
-            <h1 class="text-4xl font-bold text-gray-900">Find Your Perfect Meal</h1>
-            <p class="text-lg text-gray-600">Discover the best food & drinks in your area</p>
-            <div class="w-full max-w-xl">
+    <!-- Hero Section -->
+    <div class="relative bg-gradient-to-r from-orange-500 to-orange-600 py-16">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">Savor Exceptional Flavors</h1>
+            <p class="text-lg text-orange-100 mb-8">Discover curated dining experiences in your neighborhood</p>
+            
+            <!-- Search Bar -->
+            <div class="max-w-2xl mx-auto">
                 <div class="relative">
                     <input type="text" 
-                           placeholder="Search for restaurants or cuisines..." 
-                           class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent">
-                    <button class="absolute right-3 top-3 text-gray-400">
-                        <i class="fas fa-search"></i>
+                           placeholder="Search restaurants or cuisines..." 
+                           class="w-full px-6 py-4 rounded-xl border-0 focus:ring-4 focus:ring-orange-300/50 shadow-lg pr-16"> <!-- Added pr-16 for padding -->
+                    <button class="absolute right-2 top-2 h-12 w-12 flex items-center justify-center text-orange-500 bg-white hover:bg-orange-50 rounded-xl transition-all">
+                        <i class="fas fa-search text-lg"></i>
                     </button>
                 </div>
             </div>
         </div>
-
-        <!-- Restaurant Cards Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {% for restaurant in restaurants %}
-            <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition duration-300">
-                <div class="relative">
-                    <img src="{{ restaurant.restaurant_photo }}" 
-                         alt="{{ restaurant.restaurant_name }}" 
-                         class="w-full h-48 object-cover">
-                    <div class="absolute top-4 right-4 bg-white px-2 py-1 rounded-lg shadow">
-                        <span class="text-orange-500 font-medium">★ {{ restaurant.restaurant_rating }}</span>
-                    </div>
-                </div>
-                <div class="p-6">
-                    <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ restaurant.restaurant_name }}</h3>
-                    <p class="text-gray-600 mb-4">{{ restaurant.restaurant_cuisines }}</p>
-                    <p class="text-gray-500 text-sm mb-4">
-                        <i class="fas fa-map-marker-alt text-orange-500 mr-2"></i>
-                        {{ restaurant.restaurant_address }}
-                    </p>
-                    <div class="flex justify-between items-center">
-                        <a href="{% url 'customer_menu' restaurant.id %}" 
-                           class="inline-flex items-center px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition duration-200">
-                            <i class="fas fa-utensils mr-2"></i>
-                            View Menu
-                        </a>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
     </div>
 
-    <!-- Add a simple footer -->
-    <footer class="bg-white mt-16 py-8">
-        <div class="max-w-7xl mx-auto px-4 text-center text-gray-600">
-            <p>© 2024 Meal Mate. All rights reserved.</p>
+    <!-- Restaurant Grid -->
+    <main class="max-w-7xl mx-auto px-4 py-12">
+        <h2 class="text-3xl font-bold text-gray-900 mb-8">Featured Restaurants</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for restaurant in restaurants %}
+            <article class="bg-white rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden">
+                <div class="relative aspect-video">
+                    <img src="{{ restaurant.restaurant_photo }}" 
+                         alt="{{ restaurant.restaurant_name }}" 
+                         class="w-full h-full object-cover">
+                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 p-4">
+                        <h3 class="text-xl font-bold text-white mb-1">{{ restaurant.restaurant_name }}</h3>
+                        <div class="flex items-center gap-2 text-orange-200">
+                            <span class="bg-orange-500/90 px-2 py-1 rounded text-sm">{{ restaurant.restaurant_cuisines }}</span>
+                            <div class="flex items-center gap-1">
+                                <i class="fas fa-star"></i>
+                                <span>{{ restaurant.restaurant_rating }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="p-5">
+                    <div class="flex items-center gap-2 text-gray-600 mb-4">
+                        <i class="fas fa-map-marker-alt text-orange-500"></i>
+                        <span class="text-sm line-clamp-1">{{ restaurant.restaurant_address }}</span>
+                    </div>
+                    <a href="{% url 'customer_menu' restaurant.id %}" 
+                       class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors">
+                        <i class="fas fa-utensils"></i>
+                        <span>Explore Menu</span>
+                    </a>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-orange-100 mt-16 py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center text-orange-900">
+            <p class="mb-4">© 2025 Meal Mate. All rights reserved.</p>
+            <div class="flex justify-center gap-4">
+                <a href="#" class="hover:text-orange-700">Privacy Policy</a>
+                <a href="#" class="hover:text-orange-700">Terms of Service</a>
+                <a href="#" class="hover:text-orange-700">Contact Us</a>
+            </div>
         </div>
     </footer>
 </body>
