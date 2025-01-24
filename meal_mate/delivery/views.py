@@ -34,12 +34,18 @@ def handleSignin(request):
             customer = Customer.objects.get(fullname=fullname, password=password)
             request.session['fullname'] = customer.fullname
             request.session['customer_id'] = customer.id
-            return redirect('customer_home')  # Redirect to the home page after login
+            
+            # Redirect based on user role
+            if customer.fullname.lower() == 'admin':
+                return redirect('dashboard')  # Redirect to admin dashboard
+            else:
+                return redirect('customer_home')  # Redirect regular customers
+            
         except Customer.DoesNotExist:
             error_message = "Invalid fullname or password"
             return render(request, 'delivery/SignIn.html', {'error_message': error_message})
     else:
-        return render(request, 'delivery/SignIn.html') 
+        return render(request, 'delivery/SignIn.html')
 
 def handleSignup(request):
     if request.method == 'POST':
