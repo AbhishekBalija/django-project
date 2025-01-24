@@ -7,10 +7,67 @@
     <title>Meal Mate - Find Your Favorite Restaurant</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .video-container {
+            overflow: hidden;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -10;
+        }
+        
+        .video-bg {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scale(1.15) translateX(2%) translateY(3%);
+            transform-origin: 20% 30%;
+        }
+
+        @media (max-width: 640px) {
+            .video-bg {
+                transform: scale(1.25) translateX(8%) translateY(5%);
+            }
+        }
+
+            /* Set default font for all elements */
+    body {
+        font-family: 'Poppins', sans-serif;
+    }
+    
+    /* If you want different fonts for specific elements */
+    .font-display {
+        font-family: 'Your Display Font', sans-serif;
+    }
+    
+    .font-body {
+        font-family: 'Poppins', sans-serif;
+    }
+    </style>
 </head>
-<body class="bg-orange-50 min-h-screen">
+<body class="min-h-screen">
+    <!-- Full-page Video Background -->
+    <div class="video-container">
+        <video 
+            autoplay 
+            muted 
+            loop 
+            playsinline
+            class="video-bg"
+            poster="{% static 'images/video-poster.jpg' %}"
+        >
+            <source src="{% static 'videos/hero-bg.mp4' %}" type="video/mp4">
+        </video>
+        <div class="absolute inset-0 bg-gradient-to-b from-black/40 to-orange-500/30"></div>
+    </div>
+
     <!-- Navigation -->
-    <nav class="bg-white shadow-lg px-6 py-4 sticky top-0 z-50">
+    <nav class="bg-white/40 backdrop-blur-sm shadow-lg px-6 py-4 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="text-3xl font-bold">
                 <a href="{% url 'index' %}" 
@@ -20,7 +77,6 @@
                 </a>
             </div>
             
-            <!-- User Section -->
             <div class="flex items-center gap-4">
                 <div class="flex items-center gap-2 text-gray-600">
                     <i class="fas fa-user-circle text-orange-500 text-2xl"></i>
@@ -29,87 +85,99 @@
                 
                 <a href="{% url 'show_cart_page' %}" class="relative text-gray-700 hover:text-orange-600 transition-colors">
                     <i class="fas fa-shopping-cart text-xl"></i>
-                    <span
-                        class="absolute -top-2 -right-3 bg-orange-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    <span class="absolute -top-2 -right-3 bg-orange-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                         {{ cart_item_count }}
                     </span>
                 </a>
                 
                 <a href="{% url 'logout' %}" 
-                class="px-5 py-2.5 bg-orange-500 text-sm text-white rounded-lg hover:bg-orange-600 transition-colors flex items-center gap-2 shadow-md hover:shadow-lg">
-                 <i class="fas fa-sign-out-alt"></i>
-                 <span class="hidden sm:inline">Log Out</span>
-             </a>
+                   class="px-5 py-2.5 bg-orange-500 text-sm text-white rounded-lg hover:bg-orange-600 transition-colors flex items-center gap-2 shadow-md hover:shadow-lg">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span class="hidden sm:inline">Log Out</span>
+                </a>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-<!-- Hero Section -->
-<div class="relative bg-gradient-to-r from-orange-500 to-orange-600 py-16">
-    <div class="max-w-7xl mx-auto px-4 text-center">
-        <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">Savor Exceptional Flavors</h1>
-        <p class="text-lg text-orange-100 mb-8">Discover curated dining experiences in your neighborhood</p>
-        
-        <!-- Search Bar -->
-        <form method="get" action="{% url 'customer_home' %}" class="max-w-2xl mx-auto">
-            <div class="relative">
-                <input type="text" 
-                       name="search" 
-                       placeholder="Search restaurants or addresses..." 
-                       value="{{ search_query }}" 
-                       class="w-full px-6 py-4 rounded-xl border-0 focus:ring-4 focus:ring-orange-300/50 shadow-lg pr-16">
-                <button type="submit" class="absolute right-2 top-2 h-12 w-12 flex items-center justify-center text-orange-500 bg-white hover:bg-orange-50 rounded-xl transition-all">
-                    <i class="fas fa-search text-lg"></i>
-                </button>
-            </div>
-        </form>
+    <div class="relative pt-24 pb-32 px-4">
+        <div class="max-w-7xl mx-auto text-center">
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-6 drop-shadow-2xl">
+                Savor Exceptional Flavors
+            </h1>
+            <p class="text-xl text-orange-100 mb-8 drop-shadow-md">
+                Discover curated dining experiences in your neighborhood
+            </p>
+            
+            <!-- Search Bar -->
+            <form method="get" action="{% url 'customer_home' %}" class="max-w-2xl mx-auto">
+                <div class="relative">
+                    <input 
+                        type="text" 
+                        name="search" 
+                        placeholder="Search restaurants or addresses..." 
+                        value="{{ search_query }}" 
+                        class="w-full px-6 py-4 rounded-xl border-0 focus:ring-4 focus:ring-orange-300/50 shadow-lg pr-16 bg-white/90 backdrop-blur-sm text-gray-800"
+                    >
+                    <button 
+                        type="submit" 
+                        class="absolute right-2 top-2 h-12 w-12 flex items-center justify-center text-orange-500 bg-white hover:bg-orange-50 rounded-xl transition-all"
+                    >
+                        <i class="fas fa-search text-lg"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
-<!-- Restaurant Grid -->
-<main class="max-w-7xl mx-auto px-4 py-12">
-    <h2 class="text-3xl font-bold text-gray-900 mb-8">Featured Restaurants</h2>
-    
-    {% if restaurants %}
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {% for restaurant in restaurants %}
-        <article class="bg-white rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden">
-            <div class="relative aspect-video">
-                <img src="{{ restaurant.restaurant_photo }}" 
-                     alt="{{ restaurant.restaurant_name }}" 
-                     class="w-full h-full object-cover">
-                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 p-4">
-                    <h3 class="text-xl font-bold text-white mb-1">{{ restaurant.restaurant_name }}</h3>
-                    <div class="flex items-center gap-2 text-orange-200">
-                        <span class="bg-orange-500/90 px-2 py-1 rounded text-sm">{{ restaurant.restaurant_cuisines }}</span>
-                        <div class="flex items-center gap-1">
-                            <i class="fas fa-star"></i>
-                            <span>{{ restaurant.restaurant_rating }}</span>
+
+    <!-- Restaurant Grid with Glassmorphism Cards -->
+<main class="relative max-w-7xl mx-auto px-4 pb-16 -mt-16 z-20">
+    <div class="bg-white/5 backdrop-blur-sm rounded-2xl shadow-2xl p-6 md:p-8">
+        <h2 class="text-3xl md:text-4xl font-bold text-white mb-8 text-center drop-shadow-lg">
+            Featured Restaurants
+        </h2>
+        
+        {% if restaurants %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for restaurant in restaurants %}
+            <article class="bg-white/10 backdrop-blur-sm rounded-2xl shadow-lg hover:bg-white/20 transition-all duration-300 overflow-hidden group border border-white/20">
+                <div class="relative aspect-video">
+                    <img src="{{ restaurant.restaurant_photo }}" 
+                         alt="{{ restaurant.restaurant_name }}" 
+                         class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 p-4 flex flex-col justify-end">
+                        <h3 class="text-xl font-bold text-white mb-1 drop-shadow-md">{{ restaurant.restaurant_name }}</h3>
+                        <div class="flex items-center gap-2 text-orange-200">
+                            <span class="bg-orange-500/90 px-3 py-1 rounded-full text-sm backdrop-blur-sm">{{ restaurant.restaurant_cuisines }}</span>
+                            <div class="flex items-center gap-1 text-sm backdrop-blur-sm bg-black/30 px-2 py-1 rounded-full">
+                                <i class="fas fa-star"></i>
+                                <span>{{ restaurant.restaurant_rating }}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <div class="p-5">
-                <div class="flex items-center gap-2 text-gray-600 mb-4">
-                    <i class="fas fa-map-marker-alt text-orange-500"></i>
-                    <span class="text-sm line-clamp-1">{{ restaurant.restaurant_address }}</span>
+                
+                <div class="p-5">
+                    <div class="flex items-center gap-2 text-gray-200 mb-4">
+                        <i class="fas fa-map-marker-alt text-orange-400"></i>
+                        <span class="text-sm line-clamp-1">{{ restaurant.restaurant_address }}</span>
+                    </div>
+                    <a href="{% url 'customer_menu' restaurant.id %}" 
+                       class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-orange-500/90 hover:bg-orange-600 text-white rounded-lg transition-colors font-medium backdrop-blur-sm">
+                        <i class="fas fa-utensils"></i>
+                        <span>Explore Menu</span>
+                    </a>
                 </div>
-                <a href="{% url 'customer_menu' restaurant.id %}" 
-                   class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors">
-                    <i class="fas fa-utensils"></i>
-                    <span>Explore Menu</span>
-                </a>
-            </div>
-        </article>
-        {% endfor %}
+            </article>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center p-8">
+            <p class="text-gray-200 text-lg">No restaurants found matching your search.</p>
+        </div>
+        {% endif %}
     </div>
-    {% else %}
-    <div class="text-center text-gray-600">
-        <p>No restaurants found matching your search.</p>
-    </div>
-    {% endif %}
 </main>
 
     <!-- Footer -->

@@ -371,3 +371,19 @@ def orders(request, fullname):
         'cart_items': cart_items,
         'total_price': total_price,
     })
+
+
+
+# context_processors.py
+def global_context(request):
+    return {
+        'clients': [
+            {'name': 'KFC'},
+            {'name': 'DOMINO\'S'},
+            {'name': 'PIZZA HUT'},
+            {'name': 'BURGER KING'},
+            {'name': 'MCDONALD\'S'},
+            {'name': 'SUBWAY'},
+            {'name': 'DUNKIN\' DONUTS'},
+        ]
+    }
