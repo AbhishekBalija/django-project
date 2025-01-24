@@ -31,6 +31,14 @@
     </div>
   </nav>
 
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="mb-4 p-4 rounded {% if message.tags == 'success' %}bg-green-100 text-green-700{% else %}bg-red-100 text-red-700{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
   <main class="max-w-2xl mx-auto px-4 py-8">
     <div class="space-y-6">
       {% if cart_items %}
@@ -61,19 +69,41 @@
               </div>
               
               <div class="flex items-center justify-between mt-4">
+                <!-- Quantity Controls -->
                 <div class="flex items-center gap-2 bg-orange-50 rounded-lg px-3 py-1">
-                  <button class="text-orange-600 hover:text-orange-700">
-                    <i class="fas fa-minus text-xs"></i>
-                  </button>
+                  <!-- Decrease Button -->
+                  <form method="post" action="{% url 'update_cart_quantity' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="item_id" value="{{ item.menu_item.id }}">
+                    <input type="hidden" name="action" value="decrease">
+                    <button type="submit" class="text-orange-600 hover:text-orange-700">
+                      <i class="fas fa-minus text-xs"></i>
+                    </button>
+                  </form>
+              
+                  <!-- Quantity Display -->
                   <span class="text-sm font-medium">{{ item.quantity }}</span>
-                  <button class="text-orange-600 hover:text-orange-700">
-                    <i class="fas fa-plus text-xs"></i>
-                  </button>
+              
+                  <!-- Increase Button -->
+                  <form method="post" action="{% url 'update_cart_quantity' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="item_id" value="{{ item.menu_item.id }}">
+                    <input type="hidden" name="action" value="increase">
+                    <button type="submit" class="text-orange-600 hover:text-orange-700">
+                      <i class="fas fa-plus text-xs"></i>
+                    </button>
+                  </form>
                 </div>
-                <button class="text-red-500 hover:text-red-600 text-sm flex items-center gap-1">
-                  <i class="fas fa-trash text-xs"></i>
-                  <span>Remove</span>
-                </button>
+              
+                <!-- Remove Button -->
+                <form method="post" action="{% url 'remove_from_cart' %}">
+                  {% csrf_token %}
+                  <input type="hidden" name="item_id" value="{{ item.menu_item.id }}">
+                  <button type="submit" class="text-red-500 hover:text-red-600 text-sm flex items-center gap-1">
+                    <i class="fas fa-trash text-xs"></i>
+                    <span>Remove</span>
+                  </button>
+                </form>
               </div>
             </div>
           </div>

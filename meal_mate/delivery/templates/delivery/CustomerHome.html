@@ -27,10 +27,12 @@
                     <span class="font-medium">{{ request.session.fullname }}</span>
                 </div>
                 
-                <a href="{% url 'show_cart_page' %}" 
-                   class="relative text-gray-700 hover:text-orange-600 transition-colors">
+                <a href="{% url 'show_cart_page' %}" class="relative text-gray-700 hover:text-orange-600 transition-colors">
                     <i class="fas fa-shopping-cart text-xl"></i>
-                    <span class="absolute -top-2 -right-3 bg-orange-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                    <span
+                        class="absolute -top-2 -right-3 bg-orange-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                        {{ cart_item_count }}
+                    </span>
                 </a>
                 
                 <a href="{% url 'logout' %}" 
@@ -43,63 +45,72 @@
     </nav>
 
     <!-- Hero Section -->
-    <div class="relative bg-gradient-to-r from-orange-500 to-orange-600 py-16">
-        <div class="max-w-7xl mx-auto px-4 text-center">
-            <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">Savor Exceptional Flavors</h1>
-            <p class="text-lg text-orange-100 mb-8">Discover curated dining experiences in your neighborhood</p>
-            
-            <!-- Search Bar -->
-            <div class="max-w-2xl mx-auto">
-                <div class="relative">
-                    <input type="text" 
-                           placeholder="Search restaurants or cuisines..." 
-                           class="w-full px-6 py-4 rounded-xl border-0 focus:ring-4 focus:ring-orange-300/50 shadow-lg pr-16"> <!-- Added pr-16 for padding -->
-                    <button class="absolute right-2 top-2 h-12 w-12 flex items-center justify-center text-orange-500 bg-white hover:bg-orange-50 rounded-xl transition-all">
-                        <i class="fas fa-search text-lg"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Restaurant Grid -->
-    <main class="max-w-7xl mx-auto px-4 py-12">
-        <h2 class="text-3xl font-bold text-gray-900 mb-8">Featured Restaurants</h2>
+<!-- Hero Section -->
+<div class="relative bg-gradient-to-r from-orange-500 to-orange-600 py-16">
+    <div class="max-w-7xl mx-auto px-4 text-center">
+        <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">Savor Exceptional Flavors</h1>
+        <p class="text-lg text-orange-100 mb-8">Discover curated dining experiences in your neighborhood</p>
         
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {% for restaurant in restaurants %}
-            <article class="bg-white rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden">
-                <div class="relative aspect-video">
-                    <img src="{{ restaurant.restaurant_photo }}" 
-                         alt="{{ restaurant.restaurant_name }}" 
-                         class="w-full h-full object-cover">
-                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 p-4">
-                        <h3 class="text-xl font-bold text-white mb-1">{{ restaurant.restaurant_name }}</h3>
-                        <div class="flex items-center gap-2 text-orange-200">
-                            <span class="bg-orange-500/90 px-2 py-1 rounded text-sm">{{ restaurant.restaurant_cuisines }}</span>
-                            <div class="flex items-center gap-1">
-                                <i class="fas fa-star"></i>
-                                <span>{{ restaurant.restaurant_rating }}</span>
-                            </div>
+        <!-- Search Bar -->
+        <form method="get" action="{% url 'customer_home' %}" class="max-w-2xl mx-auto">
+            <div class="relative">
+                <input type="text" 
+                       name="search" 
+                       placeholder="Search restaurants or addresses..." 
+                       value="{{ search_query }}" 
+                       class="w-full px-6 py-4 rounded-xl border-0 focus:ring-4 focus:ring-orange-300/50 shadow-lg pr-16">
+                <button type="submit" class="absolute right-2 top-2 h-12 w-12 flex items-center justify-center text-orange-500 bg-white hover:bg-orange-50 rounded-xl transition-all">
+                    <i class="fas fa-search text-lg"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Restaurant Grid -->
+<main class="max-w-7xl mx-auto px-4 py-12">
+    <h2 class="text-3xl font-bold text-gray-900 mb-8">Featured Restaurants</h2>
+    
+    {% if restaurants %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% for restaurant in restaurants %}
+        <article class="bg-white rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden">
+            <div class="relative aspect-video">
+                <img src="{{ restaurant.restaurant_photo }}" 
+                     alt="{{ restaurant.restaurant_name }}" 
+                     class="w-full h-full object-cover">
+                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 p-4">
+                    <h3 class="text-xl font-bold text-white mb-1">{{ restaurant.restaurant_name }}</h3>
+                    <div class="flex items-center gap-2 text-orange-200">
+                        <span class="bg-orange-500/90 px-2 py-1 rounded text-sm">{{ restaurant.restaurant_cuisines }}</span>
+                        <div class="flex items-center gap-1">
+                            <i class="fas fa-star"></i>
+                            <span>{{ restaurant.restaurant_rating }}</span>
                         </div>
                     </div>
                 </div>
-                
-                <div class="p-5">
-                    <div class="flex items-center gap-2 text-gray-600 mb-4">
-                        <i class="fas fa-map-marker-alt text-orange-500"></i>
-                        <span class="text-sm line-clamp-1">{{ restaurant.restaurant_address }}</span>
-                    </div>
-                    <a href="{% url 'customer_menu' restaurant.id %}" 
-                       class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors">
-                        <i class="fas fa-utensils"></i>
-                        <span>Explore Menu</span>
-                    </a>
+            </div>
+            
+            <div class="p-5">
+                <div class="flex items-center gap-2 text-gray-600 mb-4">
+                    <i class="fas fa-map-marker-alt text-orange-500"></i>
+                    <span class="text-sm line-clamp-1">{{ restaurant.restaurant_address }}</span>
                 </div>
-            </article>
-            {% endfor %}
-        </div>
-    </main>
+                <a href="{% url 'customer_menu' restaurant.id %}" 
+                   class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors">
+                    <i class="fas fa-utensils"></i>
+                    <span>Explore Menu</span>
+                </a>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center text-gray-600">
+        <p>No restaurants found matching your search.</p>
+    </div>
+    {% endif %}
+</main>
 
     <!-- Footer -->
     <footer class="bg-orange-100 mt-16 py-8">

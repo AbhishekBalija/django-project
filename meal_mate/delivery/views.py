@@ -4,11 +4,14 @@ from django.contrib import messages
 from django.contrib.auth import logout
 from delivery.models import Customer, MenuItem, Restaurant, CartList
 from decimal import Decimal  # Import Decimal for type consistency
+from django.db.models import Q
 
 # Create your views here.
 
 def index(request):
-    return render(request, 'delivery/index.html')
+    customer_id = request.session.get('customer_id')
+    cart_item_count = get_cart_item_count(customer_id)
+    return render(request, 'delivery/index.html', {'cart_item_count': cart_item_count})
 
 def signin(request):
     return render(request, 'delivery/SignIn.html')
@@ -19,6 +22,7 @@ def signup(request):
 def dashboard(request):
     return render(request, 'delivery/Home.html')
 
+
 def handleSignin(request):
     if request.method == 'POST':
         fullname = request.POST.get('fullname')  
@@ -26,24 +30,14 @@ def handleSignin(request):
 
         try:
             customer = Customer.objects.get(fullname=fullname, password=password)
-            if fullname == 'admin':
-                return render(request, 'delivery/Home.html')
-            else:
-                # Store fullname and customer_id in session
-                request.session['fullname'] = customer.fullname
-                request.session['customer_id'] = customer.id  # Store customer_id
-
-                restaurants = Restaurant.objects.all()
-                context = {
-                    'restaurants': restaurants,
-                    'fullname': customer.fullname
-                }
-                return render(request, 'delivery/CustomerHome.html', context)
+            request.session['fullname'] = customer.fullname
+            request.session['customer_id'] = customer.id
+            return redirect('customer_home')  # Redirect to the home page after login
         except Customer.DoesNotExist:
             error_message = "Invalid fullname or password"
             return render(request, 'delivery/SignIn.html', {'error_message': error_message})
     else:
-        return HttpResponse("Invalid request")     
+        return render(request, 'delivery/SignIn.html') 
 
 def handleSignup(request):
     if request.method == 'POST':
@@ -177,28 +171,33 @@ def delete_menu_item(request, restaurant_id, item_id):
 def customer_menu(request, restaurant_id):
     restaurant = get_object_or_404(Restaurant, id=restaurant_id)
     menu_items = restaurant.menu_items.all()
-    return render(request, 'delivery/CustomerMenu.html', {'restaurant': restaurant, 'menu_items': menu_items})
+    
+    # Get the cart item count for the logged-in customer
+    customer_id = request.session.get('customer_id')
+    cart_item_count = CartList.objects.filter(customer_id=customer_id).count() if customer_id else 0
+
+    return render(request, 'delivery/CustomerMenu.html', {
+        'restaurant': restaurant,
+        'menu_items': menu_items,
+        'cart_item_count': cart_item_count  # Pass the cart item count to the template
+    })
 
 # Show Cart Page
 
 def show_cart_page(request):
-    customer_id = request.session.get('customer_id')  # Get customer ID from session
-
+    customer_id = request.session.get('customer_id')
     if not customer_id:
-        return redirect('signin')  # Redirect to login if customer ID is missing
+        return redirect('signin')
 
     customer = get_object_or_404(Customer, id=customer_id)
     cart_items = CartList.objects.filter(customer=customer)
 
-    # Calculate subtotal (sum of all items)
     subtotal = sum(item.total_price() for item in cart_items)
-
-    # Define discount and shipping fees as Decimal
-    discount = Decimal("50.00")  # Convert float to Decimal
-    shipping_fees = Decimal("40.00")  # Convert float to Decimal
-
-    # Calculate total
+    discount = Decimal("50.00")
+    shipping_fees = Decimal("40.00")
     total = subtotal - discount + shipping_fees
+
+    cart_item_count = get_cart_item_count(customer_id)
 
     return render(request, "delivery/Cart.html", {
         "cart_items": cart_items,
@@ -206,6 +205,7 @@ def show_cart_page(request):
         "discount": discount,
         "shipping_fees": shipping_fees,
         "total": total,
+        "cart_item_count": cart_item_count
     })
 
 # Add to Cart
@@ -227,16 +227,87 @@ def add_to_cart(request, item_id):
 
     return redirect("show_cart_page")  # No need to pass customer_id
 
+# Update cart quantity
+def update_cart_quantity(request):
+    if request.method == 'POST':
+        customer_id = request.session.get('customer_id')
+        if not customer_id:
+            messages.error(request, 'You must be logged in to update your cart.')
+            return redirect('signin')
+
+        item_id = request.POST.get('item_id')
+        action = request.POST.get('action')  # 'increase' or 'decrease'
+
+        try:
+            customer = Customer.objects.get(id=customer_id)
+            cart_item = CartList.objects.get(customer=customer, menu_item_id=item_id)
+
+            if action == 'increase':
+                cart_item.quantity += 1
+            elif action == 'decrease' and cart_item.quantity > 1:
+                cart_item.quantity -= 1
+
+            cart_item.save()
+            messages.success(request, 'Cart updated successfully!')
+
+        except (Customer.DoesNotExist, CartList.DoesNotExist):
+            messages.error(request, 'Item not found in cart.')
+
+    return redirect('show_cart_page')
+
+def get_cart_item_count(customer_id):
+    if customer_id:
+        return CartList.objects.filter(customer_id=customer_id).count()
+    return 0
+
 # Remove from Cart
+def remove_from_cart(request):
+    if request.method == 'POST':
+        customer_id = request.session.get('customer_id')
+        if not customer_id:
+            messages.error(request, 'You must be logged in to update your cart.')
+            return redirect('signin')
 
-def remove_from_cart(request, item_id):
+        item_id = request.POST.get('item_id')
+
+        try:
+            customer = Customer.objects.get(id=customer_id)
+            cart_item = CartList.objects.get(customer=customer, menu_item_id=item_id)
+            cart_item.delete()
+            messages.success(request, 'Item removed from cart.')
+
+        except (Customer.DoesNotExist, CartList.DoesNotExist):
+            messages.error(request, 'Item not found in cart.')
+
+    return redirect('show_cart_page')
+
+
+# Search Restaurants
+
+def customer_home(request):
+    # Check if the user is logged in
+    if 'customer_id' not in request.session:
+        return redirect('handleSignin')  # Redirect to login if not authenticated
+
+    # Get the search query from the request
+    search_query = request.GET.get('search', '')
+
+    # Filter restaurants by name or address
+    if search_query:
+        restaurants = Restaurant.objects.filter(
+            Q(restaurant_name__icontains=search_query) | 
+            Q(restaurant_address__icontains=search_query)
+        )
+    else:
+        restaurants = Restaurant.objects.all()
+
+    # Get the cart item count for the logged-in customer
     customer_id = request.session.get('customer_id')
+    cart_item_count = CartList.objects.filter(customer_id=customer_id).count() if customer_id else 0
 
-    if not customer_id:
-        return redirect('signin')  # Redirect to login if customer_id is missing
-
-    customer = get_object_or_404(Customer, id=customer_id)
-    cart_item = get_object_or_404(CartList, customer=customer, menu_item_id=item_id)
-    cart_item.delete()
-
-    return redirect("show_cart_page")  # No need to pass customer_id
+    context = {
+        'restaurants': restaurants,
+        'cart_item_count': cart_item_count,
+        'search_query': search_query  # Pass the search query to the template
+    }
+    return render(request, 'delivery/CustomerHome.html', context)

@@ -27,9 +27,12 @@
                     <span class="font-medium">{{ request.session.fullname }}</span>
                 </div>
                 
-                <a href="{% url 'show_cart_page' %}" class="relative text-gray-700 hover:text-orange-600">
+                <a href="{% url 'show_cart_page' %}" class="relative text-gray-700 hover:text-orange-600 transition-colors">
                     <i class="fas fa-shopping-cart text-xl"></i>
-                    <span class="absolute -top-2 -right-3 bg-orange-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                    <span
+                        class="absolute -top-2 -right-3 bg-orange-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                        {{ cart_item_count }}
+                    </span>
                 </a>
                 
                 <a href="{% url 'logout' %}" 
