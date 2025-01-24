@@ -5,6 +5,8 @@ from django.contrib.auth import logout
 from delivery.models import Customer, MenuItem, Restaurant, CartList
 from decimal import Decimal  # Import Decimal for type consistency
 from django.db.models import Q
+from django.conf import settings
+import razorpay
 
 # Create your views here.
 
@@ -311,3 +313,55 @@ def customer_home(request):
         'search_query': search_query  # Pass the search query to the template
     }
     return render(request, 'delivery/CustomerHome.html', context)
+
+
+def checkout(request, fullname):
+    # Fetch customer using fullname
+    customer = get_object_or_404(Customer, fullname=fullname)
+    cart_items = CartList.objects.filter(customer=customer)
+
+    # Calculate total price
+    total_price = sum(item.total_price() for item in cart_items)
+
+    if total_price == 0:
+        return render(request, 'delivery/checkout.html', {
+            'error': 'Your cart is empty!',
+        })
+
+    # Initialize Razorpay client
+    client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
+
+    # Create Razorpay order
+    order_data = {
+        'amount': int(total_price * 100),  # Amount in paisa
+        'currency': 'INR',
+        'payment_capture': '1',  # Automatically capture payment
+    }
+    order = client.order.create(data=order_data)
+
+    # Pass the order details to the frontend
+    return render(request, 'delivery/checkout.html', {
+        'fullname': fullname,
+        'cart_items': cart_items,
+        'total_price': total_price,
+        'razorpay_key_id': settings.RAZORPAY_KEY_ID,
+        'order_id': order['id'],  # Razorpay order ID
+        'amount': total_price,
+    })
+
+def orders(request, fullname):
+    customer = get_object_or_404(Customer, fullname=fullname)
+    cart_items = CartList.objects.filter(customer=customer)
+
+    # Calculate total price
+    total_price = sum(item.total_price() for item in cart_items)
+
+    # Clear the cart after fetching its details
+    cart_items.delete()
+
+    return render(request, 'delivery/orders.html', {
+        'fullname': fullname,
+        'customer': customer,
+        'cart_items': cart_items,
+        'total_price': total_price,
+    })
